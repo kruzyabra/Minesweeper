@@ -66,21 +66,37 @@ public class Field extends JFrame{
      */
 
     private void openCells(int x, int y) {
-        if (x < 0 || x > FIELD_SIZE - 1 || y < 0 || y > FIELD_SIZE - 1) return; // Неверные координаты клетки
-        if (gameField[x][y].isOpen()) return; // Клетка уже открыта
 
-        if (gameField[x][y].isMined()) {
-            isBanged = true;
+            if (x < 0 || x > FIELD_SIZE - 1 || y < 0 || y > FIELD_SIZE - 1) return; // Неверные координаты клетки
+            if (gameField[x][y].isOpen()) return; // Клетка уже открыта
 
-        }
+            if (gameField[x][y].isMined()) {
+//                isBanged = true;
+                gameField[x][y].open(true);
+                openAllCells();
+                return;
+            }
 
-        gameField[x][y].open(isBanged);
+            gameField[x][y].open(false);
 
-        if (!gameField[x][y].isMined() && gameField[x][y].minesCounter == 0) {
-            for (int dx = -1; dx < 2; dx++)
-                for (int dy = -1; dy < 2; dy++)
-//                    if (!gameField[x + dx][y + dy].isMined())
+            if (!gameField[x][y].isMined() && gameField[x][y].minesCounter == 0) {
+                for (int dx = -1; dx < 2; dx++)
+                    for (int dy = -1; dy < 2; dy++)
                         openCells(x + dx, y + dy);
+            }
+
+    }
+
+    /**
+     *  Метод открывает все клетки поля
+     *
+     */
+
+    private void openAllCells() {
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                gameField[i][j].open(false);
+            }
         }
     }
 
